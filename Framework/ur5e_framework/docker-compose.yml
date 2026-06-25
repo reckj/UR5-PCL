@@ -1,7 +1,7 @@
 services:
-  # URSim simulated controller. x86 image -> emulated on Apple Silicon (slow but
-  # functional). Exposes the real RTDE ports, so framework code is identical
-  # against sim and the real arm.
+  # URSim simulated controller. x86 (amd64) image — native on Intel/Windows,
+  # emulated on Apple Silicon (slower but works). Exposes the real RTDE ports, so
+  # framework code is identical against sim and the real arm.
   ursim:
     image: universalrobots/ursim_e-series
     platform: linux/amd64
@@ -13,11 +13,10 @@ services:
     environment:
       - ROBOT_MODEL=UR5
 
-  # Dev container. arm64 = native on Apple Silicon; mirrors the Debian/aarch64
-  # target. Project is bind-mounted for live edits.
+  # Dev container. No platform pin -> builds native for each laptop (Apple Silicon
+  # arm64, Intel/Windows amd64). Project is bind-mounted for live edits.
   dev:
     build: .
-    platform: linux/arm64
     depends_on:
       - ursim
     volumes:
@@ -29,11 +28,10 @@ services:
     stdin_open: true
     tty: true
 
-  # Live 3D viewer — browser at http://localhost:7000/static/. Receive-only,
-  # driven by RTDE state; runs alongside the dev shell. Works in Remote mode.
+  # Live 3D viewer — browser at http://localhost:7001/static/. Receive-only,
+  # driven by RTDE state; runs alongside the dev shell.
   viewer:
     build: .
-    platform: linux/arm64
     depends_on:
       - ursim
     volumes:

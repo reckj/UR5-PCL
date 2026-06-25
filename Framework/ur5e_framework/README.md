@@ -3,6 +3,9 @@
 > **STATUS: experimental / internal. NOT validated for student use.**
 > Upstream toolbuilding. Students only ever receive validated, stable framework.
 
+> **Students:** start with [`STUDENT_SETUP.md`](STUDENT_SETUP.md) — Docker is the
+> only thing you install.
+
 Host-parameterized RTDE framework for the UR5e. The same code targets URSim or
 the real arm — only the host changes (`src/ur5e/config.py`, env-overridable).
 
