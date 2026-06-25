@@ -59,15 +59,13 @@ to download it as a ZIP:
 
 ---
 
-## Step 3 — Open a terminal in the `Framework` folder
+## Step 3 — Open a terminal in the `Framework/ur5e_framework` folder
 
-You'll type a few commands. Open a terminal **inside the `Framework` subfolder**
-(it's inside `UR5-PCL-main`):
 
 - **Mac:** open the **Terminal** app (Applications → Utilities → Terminal). Type
-  `cd ` (with a space), then **drag the `Framework` folder** from Finder onto the
+  `cd ` (with a space), then **drag the `ur5e_framework` folder** from Finder onto the
   Terminal window and press **Enter**.
-- **Windows:** open the `Framework` folder in File Explorer, click the address
+- **Windows:** open the `ur5e_framework` folder in File Explorer, click the address
   bar, type `powershell`, and press **Enter**.
 
 To check you're in the right place, type `ls` (Mac) or `dir` (Windows) and press
