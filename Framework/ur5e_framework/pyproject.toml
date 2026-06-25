@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ur5e"
+version = "0.0.1"
+description = "UR5e research/teaching framework (experimental/internal)"
+requires-python = ">=3.10,<3.13"   # ur_rtde 1.6.3 ships/tests up to cp312; 3.13+ untested
+dependencies = [
+    "ur_rtde>=1.6.0",
+    "numpy",
+]
+
+[project.optional-dependencies]
+# Exploration/analysis track. Not needed on the real-robot execution path.
+notebook = ["jupyter", "matplotlib", "numpy"]
+# Live 3D viewer (browser, driven by RTDE state).
+viz = ["meshcat", "numpy"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

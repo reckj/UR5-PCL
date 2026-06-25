@@ -1,0 +1,46 @@
+services:
+  # URSim simulated controller. x86 image -> emulated on Apple Silicon (slow but
+  # functional). Exposes the real RTDE ports, so framework code is identical
+  # against sim and the real arm.
+  ursim:
+    image: universalrobots/ursim_e-series
+    platform: linux/amd64
+    ports:
+      - "5900:5900"          # VNC
+      - "6080:6080"          # browser UI -> http://localhost:6080/vnc.html
+      - "29999:29999"        # dashboard
+      - "30001-30004:30001-30004"  # RTDE / primary / secondary
+    environment:
+      - ROBOT_MODEL=UR5
+
+  # Dev container. arm64 = native on Apple Silicon; mirrors the Debian/aarch64
+  # target. Project is bind-mounted for live edits.
+  dev:
+    build: .
+    platform: linux/arm64
+    depends_on:
+      - ursim
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    environment:
+      URSIM_HOST: ursim       # reach URSim by service name on the compose network
+      # UR_HOST: 192.168.x.x  # set to the real arm's LAN IP when targeting hardware
+    stdin_open: true
+    tty: true
+
+  # Live 3D viewer — browser at http://localhost:7000/static/. Receive-only,
+  # driven by RTDE state; runs alongside the dev shell. Works in Remote mode.
+  viewer:
+    build: .
+    platform: linux/arm64
+    depends_on:
+      - ursim
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    environment:
+      URSIM_HOST: ursim
+    ports:
+      - "7001:7000"   # host 7001 (avoids macOS AirPlay Receiver on 7000) -> container 7000
+    command: python scripts/rtde_viewer.py --target sim

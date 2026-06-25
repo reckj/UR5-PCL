@@ -1,0 +1,10 @@
+.venv/
+venv/
+.git/
+__pycache__/
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+boost-fix.cmake
+.DS_Store
