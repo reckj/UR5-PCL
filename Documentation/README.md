@@ -17,6 +17,7 @@ This folder mirrors the project's Notion research log. Each file is one major se
 7. [Safety Model](07-safety-model.md) — authoritative PolyScope layer + software guardrail, cell description, implementation
 8. [Student-Facing Motion API Design](08-motion-api-design.md) — three-layer API, orientation, waypoints, naming
 9. [Tool I/O — Electrical Interface](09-tool-io-electrical-interface.md) — 8-pin connector, pinout, power budget, framework mapping
+10. [Toolhead RGB + Button over RS485 / TCI](10-toolhead-rgb-rs485-interface.md) — APDS9960 + button Arduino toolhead, TCI :54321 host receive, live viz + button-gated motion
 
 ## About this documentation
 

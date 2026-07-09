@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://sdurobotics.gitlab.io/ur_rtde/ -->
+<html class="writer-html5" lang="en" data-content_root="./"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/pygments.css">
+      <link rel="stylesheet" type="text/css" href="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/theme.css">
+
+  
+      <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/jquery.js"></script>
+      <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/_sphinx_javascript_frameworks_compat.js"></script>
+      <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/documentation_options.js"></script>
+      <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/doctools.js"></script>
+      <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/sphinx_highlight.js"></script>
+    <script src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/theme.js"></script>
+    <link rel="index" title="Index" href="https://sdurobotics.gitlab.io/ur_rtde/genindex.html">
+    <link rel="search" title="Search" href="https://sdurobotics.gitlab.io/ur_rtde/search.html">
+    <link rel="next" title="Introduction" href="https://sdurobotics.gitlab.io/ur_rtde/introduction/introduction.html"> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+
+          
+          
+          <a href="https://sdurobotics.gitlab.io/ur_rtde/#" class="icon icon-home">
+            ur_rtde
+              <img src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/robots.png" class="logo" alt="Logo">
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="https://sdurobotics.gitlab.io/ur_rtde/search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/faq/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="https://sdurobotics.gitlab.io/ur_rtde/#">ur_rtde</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="https://sdurobotics.gitlab.io/ur_rtde/#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Universal Robots RTDE C++ Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="https://sdurobotics.gitlab.io/ur_rtde/_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p><a class="reference external" href="https://gitlab.com/sdurobotics/ur_rtde/commits/master"><img alt="Build badge" src="./Universal Robots RTDE C++ Interface — ur_rtde 1.6.3 documentation_files/pipeline.svg"></a></p>
+<hr class="docutils">
+<section id="universal-robots-rtde-c-interface">
+<h1>Universal Robots RTDE C++ Interface<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/#universal-robots-rtde-c-interface" title="Link to this heading"></a></h1>
+<p>A C++ interface for controlling and receiving data from an UR robot using the <a class="reference external" href="https://www.universal-robots.com/how-tos-and-faqs/how-to/ur-how-tos/real-time-data-exchange-rtde-guide-22229/">Real-Time Data Exchange (RTDE)</a>.
+The interface can also by used with python, through the provided python bindings.</p>
+<section id="how-to-cite">
+<h2>How to Cite<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/#how-to-cite" title="Link to this heading"></a></h2>
+<p>If you use ur_rtde in your research, please cite this <a class="reference external" href="https://doi.org/10.1109/SII59315.2025.10871000">paper</a>:</p>
+<div class="highlight-latex notranslate"><div class="highlight"><pre><span></span>@inproceedings<span class="nb">{</span>10871000,
+  author=<span class="nb">{</span>Lindvig, Anders Prier and Iturrate, Iñigo and Kindler, Uwe and Sloth, Christoffer<span class="nb">}</span>,
+  booktitle=<span class="nb">{</span>2025 IEEE/SICE International Symposium on System Integration (SII)<span class="nb">}</span>,
+  title=<span class="nb">{</span>ur<span class="nb">_</span>rtde: An Interface for Controlling Universal Robots (UR) using the
+  Real-Time Data Exchange(RTDE)<span class="nb">}</span>, year=<span class="nb">{</span>2025<span class="nb">}</span>, pages=<span class="nb">{</span>1118-1123<span class="nb">}</span>,
+  keywords=<span class="nb">{</span>Protocols;Linux;C++ languages;System integration;
+  Writing;Manipulators;Real-time systems;Libraries;Timing;MATLAB<span class="nb">}</span>,
+  doi=<span class="nb">{</span>10.1109/SII59315.2025.10871000<span class="nb">}}</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/faq/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#real-time-setup-guide">Real-time Setup Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#setting-a-real-time-priority">Setting a real-time priority</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#use-with-dockerized-ur-simulator">Use with Dockerized UR Simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#install-docker">Install docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#build-docker-image">Build docker image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#run-docker-image">Run docker image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#use-with-matlab">Use with MATLAB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html#use-with-robotiq-gripper">Use with Robotiq Gripper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#quick-install">Quick Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-robots">Compatible Robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-operating-systems">Compatible Operating Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#build-instructions">Build Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#linux-ubuntu-and-macos">Linux (Ubuntu) and macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#windows">Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#cmake-example">CMake Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#basic-use">Basic use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#use-with-externalcontrol-ur-cap">Use with ExternalControl UR Cap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#use-with-custom-script">Use with custom script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#record-data-example">Record Data Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#move-asynchronous-example">Move Asynchronous Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#move-until-contact">Move Until Contact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#forcemode-example">Forcemode Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#servoj-example">ServoJ Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#speedj-example">SpeedJ Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#movel-path-with-blending-example">MoveL Path With Blending Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#io-example">IO Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#robotiq-gripper-example">Robotiq Gripper Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html#jog-example">Jog Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#rtde-control-interface-api">RTDE Control Interface API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde20RTDEControlInterfaceE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::RTDEControlInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#rtde-receive-interface-api">RTDE Receive Interface API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde20RTDEReceiveInterfaceE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::RTDEReceiveInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#rtde-io-interface-api">RTDE IO Interface API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde15RTDEIOInterfaceE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::RTDEIOInterface</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#rtde-class-api">RTDE Class API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde4RTDEE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::RTDE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#script-client-api">Script Client API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde12ScriptClientE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::ScriptClient</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#dashboard-client-api">Dashboard Client API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde15DashboardClientE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::DashboardClient</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#robotiq-gripper-api">Robotiq Gripper API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html#_CPPv4N7ur_rtde14RobotiqGripperE"><code class="docutils literal notranslate"><span class="pre">ur_rtde::RobotiqGripper</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="https://sdurobotics.gitlab.io/ur_rtde/introduction/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>© Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org/">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+</body></html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!-- saved from url=(0097)https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-operating-systems -->
+<html class="writer-html5" lang="en" data-content_root="../"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installation — ur_rtde 1.6.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="./Installation — ur_rtde 1.6.3 documentation_files/pygments.css">
+      <link rel="stylesheet" type="text/css" href="./Installation — ur_rtde 1.6.3 documentation_files/theme.css">
+
+  
+      <script src="./Installation — ur_rtde 1.6.3 documentation_files/jquery.js"></script>
+      <script src="./Installation — ur_rtde 1.6.3 documentation_files/_sphinx_javascript_frameworks_compat.js"></script>
+      <script src="./Installation — ur_rtde 1.6.3 documentation_files/documentation_options.js"></script>
+      <script src="./Installation — ur_rtde 1.6.3 documentation_files/doctools.js"></script>
+      <script src="./Installation — ur_rtde 1.6.3 documentation_files/sphinx_highlight.js"></script>
+    <script src="./Installation — ur_rtde 1.6.3 documentation_files/theme.js"></script>
+    <link rel="index" title="Index" href="https://sdurobotics.gitlab.io/ur_rtde/genindex.html">
+    <link rel="search" title="Search" href="https://sdurobotics.gitlab.io/ur_rtde/search.html">
+    <link rel="next" title="Examples" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html">
+    <link rel="prev" title="Guides" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html"> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+
+          
+          
+          <a href="https://sdurobotics.gitlab.io/ur_rtde/index.html" class="icon icon-home">
+            ur_rtde
+              <img src="./Installation — ur_rtde 1.6.3 documentation_files/robots.png" class="logo" alt="Logo">
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="https://sdurobotics.gitlab.io/ur_rtde/search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current" aria-expanded="true">
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/faq/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html">Guides</a></li>
+<li class="toctree-l1 current" aria-expanded="true"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#" aria-expanded="false"><button class="toctree-expand" title="Open/close menu"></button>Installation</a><ul>
+<li class="toctree-l2" aria-expanded="false"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#quick-install" aria-expanded="false">Quick Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-robots">Compatible Robots</a></li>
+<li class="toctree-l2 current" aria-expanded="true"><a class="reference internal current" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-operating-systems" aria-expanded="true">Compatible Operating Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#build-instructions"><button class="toctree-expand" title="Open/close menu"></button>Build Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#linux-ubuntu-and-macos"><button class="toctree-expand" title="Open/close menu"></button>Linux (Ubuntu) and macOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#dependencies">Dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#build">Build</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#windows"><button class="toctree-expand" title="Open/close menu"></button>Windows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#id1">Dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#visual-studio-build">Visual Studio Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#commandline-build">Commandline Build</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://sdurobotics.gitlab.io/ur_rtde/api/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="https://sdurobotics.gitlab.io/ur_rtde/index.html">ur_rtde</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="https://sdurobotics.gitlab.io/ur_rtde/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="https://sdurobotics.gitlab.io/ur_rtde/_sources/installation/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#installation" title="Link to this heading"></a></h1>
+<p>This section contains information on how to build and install the ur_rtde library.</p>
+<section id="quick-install">
+<h2>Quick Install<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#quick-install" title="Link to this heading"></a></h2>
+<p>If you are on Linux (Ubuntu), you can install ur_rtde with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:sdurobotics/ur-rtde
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>librtde<span class="w"> </span>librtde-dev
+</pre></div>
+</div>
+<p>If you only want to the use the Python interface, you can install ur_rtde through pip:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>ur_rtde
+</pre></div>
+</div>
+<p>Notice! Make sure your pip version &gt;=19.3, otherwise the install might fail.</p>
+</section>
+<section id="compatible-robots">
+<h2>Compatible Robots<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-robots" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>All CB-Series from CB3/CB3.1 software 3.3</p></li>
+<li><p>All e-Series</p></li>
+</ul>
+</section>
+<section id="compatible-operating-systems">
+<h2>Compatible Operating Systems<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#compatible-operating-systems" title="Link to this heading"></a></h2>
+<p>Currently tested on:</p>
+<ul class="simple">
+<li><p>Ubuntu 20.04 (Focal Fossa)</p></li>
+<li><p>Ubuntu 22.04 (Jammy Jellyfish)</p></li>
+<li><p>Ubuntu 24.04 (Noble Numbat)</p></li>
+<li><p>macOS 15 (Sequoia)</p></li>
+<li><p>Windows 10 Pro x64</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ur_rtde should be compatible with Windows 10. However it has currently only
+been tested without python bindings. pybind11 supports
+<em>Microsoft Visual Studio 2015 Update 3 or newer</em> on Windows.</p>
+</div>
+</section>
+<section id="build-instructions">
+<h2>Build Instructions<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#build-instructions" title="Link to this heading"></a></h2>
+<p>This section describes how to build ur_rtde from source on different platforms. The dependencies of ur_rtde are:</p>
+<a class="reference external image-reference" href="https://www.boost.org/"><img alt="Boost" src="./Installation — ur_rtde 1.6.3 documentation_files/boost-logo.svg" style="width: 60px;">
+</a>
+<a class="reference external image-reference" href="https://github.com/pybind/pybind11"><img alt="pybind11" src="./Installation — ur_rtde 1.6.3 documentation_files/pybind11-logo.png" style="width: 100px;">
+</a>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.boost.org/">Boost</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pybind/pybind11">pybind11</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pybind11 dependency is optional and are only required if ur_rtde are to be used with Python. The ur_rtde library
+depends on Boost for networking and threading.</p>
+</div>
+<section id="linux-ubuntu-and-macos">
+<h3>Linux (Ubuntu) and macOS<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#linux-ubuntu-and-macos" title="Link to this heading"></a></h3>
+<section id="dependencies">
+<h4>Dependencies<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#dependencies" title="Link to this heading"></a></h4>
+<p>You can install Boost on Ubuntu using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libboost-all-dev
+</pre></div>
+</div>
+<p>On macOS you can install Boost with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>boost
+</pre></div>
+</div>
+<p><em>Optionally</em> if you want to use ur_rtde with Python make sure pybind11 is checked out from
+the submodule before attempting to build using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+</section>
+<section id="build">
+<h4>Build<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#build" title="Link to this heading"></a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/sdurobotics/ur_rtde.git
+<span class="nb">cd</span><span class="w"> </span>ur_rtde
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+mkdir<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want Python 2.x support you must use <code class="code highlight bash docutils literal highlight-bash">cmake<span class="w"> </span>-DPYBIND11_PYTHON_VERSION<span class="o">=</span><span class="m">2</span>.x<span class="w"> </span>..</code> in this step, since the
+default interpreter is Python3. If you do not want to use Python at all, please
+use <code class="code highlight bash docutils literal highlight-bash">cmake<span class="w"> </span>-DPYTHON_BINDINGS:BOOL<span class="o">=</span>OFF<span class="w"> </span>..</code></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In order to test the interface, download the most recent UR simulator for your robot from here
+<a class="reference external" href="https://www.universal-robots.com/download/">UR Download</a>. Once installed run the simulator with:
+<code class="code highlight bash docutils literal highlight-bash">./start-ursim.sh</code>, when the simulator is running, initialize the robot by first clicking the <strong>‘ON’</strong> button,
+and next clicking the <strong>‘START’</strong> button. You can now run the examples.</p>
+</div>
+</section>
+</section>
+<section id="windows">
+<h3>Windows<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#windows" title="Link to this heading"></a></h3>
+<section id="id1">
+<h4>Dependencies<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#id1" title="Link to this heading"></a></h4>
+<p>Boost precompiled libraries can be found at:
+<a class="reference external" href="https://sourceforge.net/projects/boost/files/boost-binaries/">https://sourceforge.net/projects/boost/files/boost-binaries/</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are using Microsoft Visual Studio make sure you download a version of
+Boost that matches your Microsoft Visual Studio version.</p>
+</div>
+<p>Depending on your setup it may be required to add the Boost library path
+to the system environment variables.</p>
+<p><em>Optionally</em> if you want to use ur_rtde with Python make sure pybind11 is checked out from
+the submodule before attempting to build using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/sdurobotics/ur_rtde.git
+</pre></div>
+</div>
+</section>
+<section id="visual-studio-build">
+<h4>Visual Studio Build<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#visual-studio-build" title="Link to this heading"></a></h4>
+<p>If you are using Microsoft Visual Studio with CMake support (supported since 2017 version).
+You should be able to navigate to the folder you cloned the repository to and open the ur_rtde
+as a CMake project. See the image below.</p>
+<a class="reference external image-reference" href="https://docs.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=vs-2019"><img alt="Open CMake Project" src="./Installation — ur_rtde 1.6.3 documentation_files/open_cmake_project.png">
+</a>
+<p>You can find more information about CMake projects in visual studio <a class="reference external" href="https://docs.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=vs-2019">Here</a>.</p>
+<p>Once you have loaded the project navigate to the CMake Settings through ‘Project-&gt;CMake Settings for ur_rtde’.
+Set the following CMake Command Arguments in order for the project to find Boost and disable the Python bindings:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>-DBOOST_ROOT<span class="o">=</span>&lt;YOUR_BOOST_ROOT&gt;<span class="w"> </span>-DBOOST_LIBRARYDIR<span class="o">=</span>&lt;YOUR_BOOST_LIBRARY_DIR&gt;<span class="w"> </span>-DPYTHON_BINDINGS:BOOL<span class="o">=</span>OFF
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Remember you can run the UR Simulator on Windows through the virtual machines provided by UR. In the VMware virtual
+machine you can set the network adapter to “Bridged” in the ‘Virtual Machine Settings’. If you then obtain the IP
+address of the robot using ifconfig, you can test the communication with your windows host running the ur_rtde program.</p>
+</div>
+</section>
+<section id="commandline-build">
+<h4>Commandline Build<a class="headerlink" href="https://sdurobotics.gitlab.io/ur_rtde/installation/installation.html#commandline-build" title="Link to this heading"></a></h4>
+<p>A quick way to compile the interface on Windows, is to do everything from the command line.
+The following commands can be executed from the command prompt after Boost has been installed.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/sdurobotics/ur_rtde.git
+<span class="nb">cd</span><span class="w"> </span>ur_rtde
+mkdir<span class="w"> </span>Build
+<span class="nb">cd</span><span class="w"> </span>Build
+cmake<span class="w"> </span>-DBOOST_ROOT<span class="o">=</span><span class="s2">"&lt;Path:\to\boost_&lt;version&gt;&gt;"</span><span class="w"> </span>-DBOOST_LIBRARYDIR<span class="o">=</span><span class="s2">"&lt;Path:\to\boost_&lt;VERSION&gt;\&lt;COMPILER&gt;&gt;"</span><span class="w"> </span>-DPYTHON_BINDINGS<span class="o">=</span>OFF<span class="w"> </span>..
+msbuild<span class="w"> </span>ur_rtde.sln<span class="w"> </span>/property:Configuration<span class="o">=</span>Release<span class="w"> </span>/maxcpucount:&lt;NUMBER_OF_CORES&gt;
+</pre></div>
+</div>
+<p>filling out the system specific variables the setup looks like this for a computer with 8 cores,
+using visual studio 2019 and boost 1.71.0.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-DBOOST_ROOT<span class="o">=</span><span class="s2">"C:\local\boost_1_71_0"</span><span class="w"> </span>-DBOOST_LIBRARYDIR<span class="o">=</span><span class="s2">"C:\local\boost_1_71_0\lib64-msvc-14.2"</span><span class="w"> </span>-DPYTHON_BINDINGS<span class="o">=</span>OFF<span class="w"> </span>..
+msbuild<span class="w"> </span>ur_rtde.sln<span class="w"> </span>/property:Configuration<span class="o">=</span>Release<span class="w"> </span>/maxcpucount:8
+</pre></div>
+</div>
+<p>The example above is the basic setup for compiling ur_rtde below you’ll find a list of other commands and what they do.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>-G “Visual Studio 15 2017 Win64”</dt><dd><ul>
+<li><p>This command forces the generator to vs 2017 64 bit. On some 64 bit systems when running cmake boost will
+look for 32bit libraries which are not there.</p></li>
+<li><p>The equivalent for Visual studio 2019 is: -G “Visual Studio 16 2019” -A x64</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-DBUILD_STATIC=[ON|OFF]</dt><dd><ul>
+<li><p>The default value is “OFF”, which means that a dll library is built.
+This means, that when trying to link against this library runtime.
+The .dll file must either be moved to the same directory as .exe file.
+Or the system PATH variable must be set to include Build\&lt;config&gt;</p></li>
+<li><p>If it is set to ON the libraries will be build statically.
+This will make the compile time linking libraries a little longer and the output .exe or .lib a little larger.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-DBoost_USE_STATIC_LIBS=[ON|OFF]</dt><dd><ul>
+<li><p>The default is OFF. If set to on it will link statically to Boost libraries.
+This will give the same benefits/drawbacks as -DBUILD_STATIC, just for the Boost libraries instead.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="https://sdurobotics.gitlab.io/ur_rtde/guides/guides.html" class="btn btn-neutral float-left" title="Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="https://sdurobotics.gitlab.io/ur_rtde/examples/examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>© Copyright 2026.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org/">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+</body></html>
