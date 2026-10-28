@@ -115,10 +115,18 @@ present ✓. Static: `py_compile` all files ✓; IP/secret grep: only the
 `192.168.1.10` placeholder in `check_connection.py`'s docstring (not the
 robot's IP) ✓; largest file 464 KB (`upperarm.glb`) ✓; no `toolio` references ✓.
 
-**Not verified here (do on the Mac):** arm64 image build via buildx; Apple
-Silicon URSim speed; `.command` launcher under Gatekeeper; `scenes/` file
-ownership when the viewer saves from the container; Safari/Chrome gizmo +
-upload.
+**Fresh Mac mini M1 (lab, 2026-10-28 late evening):** image published
+multi-arch via buildx (arm64 `ur_rtde` compile ~9 min), package public,
+anonymous pull on the Mac mini, `docker compose up` → URSim 5.9.4 + viewer,
+dev shell, `grid_process.py` runs with visible motion in the viewer,
+`Start UR5e Sim.command` works by double-click. One doc bug found: pasted
+`command  # comment` lines fail on default macOS zsh (no interactive
+comments) → all inline comments removed from student code blocks
+(student repo commit `7a4c956`). → **arm64 path validated.**
+
+**Not verified yet:** `scenes/` file ownership when the viewer saves from the container;
+Safari/Chrome gizmo + upload; a `.urp` saved in the 5.9.4 sim loaded on the
+5.9.1 pendant.
 
 ## Assumptions carried into the student repo (flag)
 
