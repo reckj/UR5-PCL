@@ -125,8 +125,8 @@ git add -A && git commit -m "sync framework" && git push
 
 What the script copies (whitelist, see the script header): `src/ur5e/` minus
 `toolio/`, `scripts/{check_connection,smoke_test_move,rtde_viewer}.py`,
-`examples/grid_process.py`, `scenes/`, `toolheads/`, `pyproject.toml`,
-`docker-compose.yml`. It deletes files in those synced folders that no longer
+`examples/grid_process.py`, `examples/function_templates/` (whole folder),
+`scenes/`, `toolheads/`, `pyproject.toml`, `docker-compose.yml`. It deletes files in those synced folders that no longer
 exist here. (`grid_di_test.py` is kept out on purpose: URSim 5.25 cannot drive
 digital inputs for RTDE clients, so it blocks at point 1 in the sim.)
 

@@ -60,6 +60,8 @@ rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" \
 #  it blocks forever in the sim. Add it here once there is a sim-side way.)
 rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" \
   --include 'grid_process.py' \
+  --include 'function_templates/' \
+  --include 'function_templates/**' \
   --exclude '*' \
   "$SRC/examples/" "$DST/examples/"
 
