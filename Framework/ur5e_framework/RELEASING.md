@@ -132,7 +132,14 @@ digital inputs for RTDE clients, so it blocks at point 1 in the sim.)
 
 What it never touches (owned by the student repo): `README.md`, `docs/`,
 `.gitignore`, `LICENSE`, `Start UR5e Sim.command/.bat`, `students/`,
-`programs/.gitkeep`. Edit those in the student clone.
+`programs/.gitkeep`, `context/` (AI knowledge base, see Doc 14) and the AI
+pointer files `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`.
+Edit those in the student clone.
+
+After every sync run `./context/make_source_snapshot.sh` in the clone: it
+regenerates `context/framework_source.md` (the framework + templates as one
+file for chat-based AI tools). If the public API changed, also update
+`context/KNOWLEDGE.md` §4 and, if a rule changed, `context/INSTRUCTIONS.md`.
 
 To promote another script/example to students: add it to the whitelist in the
 script, re-run, review the diff.
@@ -179,7 +186,8 @@ Anything that fails here goes back into `docs/SETUP.md` troubleshooting.
 1. `docker compose -f docker-compose.yml -f docker-compose.dev.yml build` + the
    three test commands in A pass against URSim.
 2. If deps changed: bump tag (C), `buildx … --push` (B), `imagetools inspect`.
-3. `./sync_to_student_repo.sh`, review `git diff` in the clone.
+3. `./sync_to_student_repo.sh`, then in the clone `./context/make_source_snapshot.sh`;
+   review `git diff`. API change → update `context/KNOWLEDGE.md` §4.
 4. Grep the clone for the lab IP / secrets: `git grep -nE '192\.168\.[0-9]+\.[0-9]+'`
    (placeholders like `192.168.x.x` are fine).
 5. Commit + push the student repo. Tell students: `git pull` (+ `docker compose

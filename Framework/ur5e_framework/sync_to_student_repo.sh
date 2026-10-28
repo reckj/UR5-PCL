@@ -6,8 +6,10 @@
 #   src/ur5e/ (minus toolio/), the whitelisted scripts/ and examples/, scenes/,
 #   toolheads/, pyproject.toml, docker-compose.yml.
 # The student repo owns its own DOCS and glue (README.md, docs/, .gitignore,
-# LICENSE, launchers, students/, programs/.gitkeep) — this script never touches
-# those. Edit them in the student repo directly.
+# LICENSE, launchers, students/, programs/.gitkeep, context/ + the AI pointer
+# files AGENTS.md, CLAUDE.md, .github/) — this script never touches those.
+# Edit them in the student repo directly. After a sync, regenerate the source
+# snapshot the AI context uses: (cd <clone> && ./context/make_source_snapshot.sh)
 #
 # Usage:
 #   ./sync_to_student_repo.sh                 # default target: ../../../UR5-PCL-EmbodiedInteraction
@@ -84,6 +86,7 @@ echo
 if [ ${#DRY[@]} -eq 0 ]; then
   (cd "$DST" && git status --short)
   echo
+  echo "snapshot: (cd '$DST' && ./context/make_source_snapshot.sh)   # refresh context/framework_source.md"
   echo "review:  cd '$DST' && git diff"
   echo "publish: git add -A && git commit -m 'sync framework' && git push"
 fi

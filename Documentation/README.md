@@ -21,6 +21,7 @@ This folder mirrors the project's Notion research log. Each file is one major se
 11. [Viewer as simulation workspace](11-viewer-scenes-and-safety-planes.md) — viser rebuild, UR5e meshes + FK verification, student scene objects + toolhead/TCP, `scene.json` format, safety planes in PolyScope terms (display only)
 12. [Student repo, prebuilt image and release workflow](12-student-repo-and-release.md) — `UR5-PCL-EmbodiedInteraction` layout, `ghcr.io/reckj/ur5e-dev:hs26.1` multi-arch image, sync script, URSim 5.25.2 verification, Remote-Control / entrypoint / DI-input findings
 13. [Function templates + taught workspace](13-function-templates-and-taught-workspace.md) — `Workspace` (4-step receive-only teach, fractions of the taught box, real-arm clamp to `cart_against_wall`), `examples/function_templates/` one script per API call
+14. [AI context folder for students](14-ai-context-folder.md) — `context/` in the student repo: INSTRUCTIONS + KNOWLEDGE for any AI assistant, generated source snapshot, ur_rtde docs + UR5e manual as text, root AGENTS.md/CLAUDE.md/copilot pointers
 
 ## About this documentation
 
