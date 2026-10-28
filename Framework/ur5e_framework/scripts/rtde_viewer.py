@@ -1,92 +1,57 @@
-"""Live RTDE 3D viewer (meshcat) for the UR5e — SIM or REAL.
+"""Live RTDE 3D viewer + scene editor for the UR5e — SIM or REAL.
 
-STATUS: experimental / internal.
+STATUS: HS26 student framework — sim-validated (URSim round-trip 2026-10-28). Display only.
 
-Renders the arm in a browser from live RTDE joint state (getActualQ), so you can
-SEE motion even in Remote Control mode (where PolyScope hides the 3D view), and
-later against the real arm (which has no sim graphics at all). Receive-only: it
-never commands motion, and multiple RTDE receive clients are fine — run this in
-one shell while a control script runs in another.
+Renders the arm (real UR5e link meshes) in a browser from live RTDE joint
+state (getActualQ), so you can SEE motion even in Remote Control mode (where
+PolyScope hides the 3D view), and later against the real arm. Receive-only:
+it never commands motion; run it next to a control script.
 
-It draws the kinematic skeleton from UR5e DH parameters (link segments + joint
-markers), not a CAD mesh. Enough to see pose and motion clearly. Orbit/zoom with
-the mouse in the browser.
+Around the arm you can place your own 3D models (table, fixtures, work
+pieces), attach a toolhead with a PolyScope-style TCP offset, and draw safety
+planes in the same terms as Installation > Safety > Planes. All of that is
+saved as a *scene*: scenes/<name>/scene.json + models/ next to it.
+NOTHING drawn here limits the robot — it is a planning aid only.
 
-Open in the Mac browser:  http://localhost:7001/static/
+Open in the Mac browser:  http://localhost:7001/
 
 Usage (inside the dev container, URSim running):
-    python scripts/rtde_viewer.py --target sim
+    python scripts/rtde_viewer.py --target sim                 # scene 'default'
+    python scripts/rtde_viewer.py --target sim --scene my_table
+    python scripts/rtde_viewer.py --no-robot --scene my_table   # edit a scene offline,
+                                                                # pose the arm with sliders
+The implementation lives in ur5e.viewer (server.py, scene.py, ...).
 """
 
 from __future__ import annotations
 
 import argparse
-import asyncio
-import math
-import threading
-import time
-
-import numpy as np
-from meshcat import Visualizer
-import meshcat.geometry as g
-import meshcat.transformations as tf
-from meshcat.servers.zmqserver import ZMQWebSocketBridge
+import os
 
 from ur5e.config import resolve_host
-from ur5e.connection import RobotConnection
-from ur5e.kinematics import fk_origins
-
-
-def start_bridge(host="0.0.0.0"):
-    """Start a meshcat web server bound to all interfaces (for host browser
-    access through the published port). Returns its zmq url."""
-    urls = {}
-    ready = threading.Event()
-
-    def run():
-        asyncio.set_event_loop(asyncio.new_event_loop())
-        bridge = ZMQWebSocketBridge(host=host)
-        urls["zmq"] = bridge.zmq_url
-        ready.set()
-        bridge.run()
-
-    threading.Thread(target=run, daemon=True).start()
-    ready.wait(5)
-    return urls["zmq"]
-
-
-def draw(vis, q):
-    pts = fk_origins(q)
-    vis["arm"].set_object(g.Line(g.PointsGeometry(pts),
-                                 g.LineBasicMaterial(color=0x1f77b4, linewidth=3)))
-    for i in range(pts.shape[1]):
-        node = vis[f"j{i}"]
-        node.set_object(g.Sphere(0.03 if i < pts.shape[1] - 1 else 0.04))
-        node.set_transform(tf.translation_matrix(pts[:, i]))
+from ur5e.viewer.server import run_viewer
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     g_ = ap.add_mutually_exclusive_group(required=True)
     g_.add_argument("--target", choices=["sim", "real"])
-    g_.add_argument("--host")
+    g_.add_argument("--host", help="robot/URSim IP")
+    g_.add_argument("--no-robot", action="store_true", help="offline: no RTDE, manual joint sliders")
+    ap.add_argument("--scene", default=os.environ.get("VIEWER_SCENE", "default"),
+                    help="scene name = folder under scenes/ (created if missing)")
     ap.add_argument("--rate", type=float, default=20.0, help="update Hz")
+    ap.add_argument("--port", type=int, default=7000, help="container port (compose maps 7001->7000)")
+    ap.add_argument("--joints", help="offline only: start pose, 6 joint angles in deg, e.g. 0,-90,90,-90,-90,0")
     args = ap.parse_args()
 
-    zmq_url = start_bridge()
-    vis = Visualizer(zmq_url=zmq_url)
-    print("viewer ready -> open http://localhost:7001/static/ in your browser")
-
-    host = args.host or resolve_host(args.target)
-    period = 1.0 / args.rate
-    print(f"streaming joint state from {host} (Ctrl-C to stop) ...")
-    with RobotConnection(host) as r:
-        try:
-            while True:
-                draw(vis, r.receive.getActualQ())
-                time.sleep(period)
-        except KeyboardInterrupt:
-            print("\nstopped.")
+    host = None if args.no_robot else (args.host or resolve_host(args.target))
+    q0 = None
+    if args.joints:
+        q0 = [float(v) for v in args.joints.split(",")]
+        if len(q0) != 6:
+            ap.error("--joints needs 6 comma-separated values (deg)")
+    run_viewer(host=host, scene_name=args.scene, rate=args.rate, port=args.port, joints_deg=q0)
 
 
 if __name__ == "__main__":

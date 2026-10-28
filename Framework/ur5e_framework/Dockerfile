@@ -13,11 +13,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libboost-system-dev libboost-thread-dev libboost-program-options-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Build tooling for the editable install at container start (entrypoint runs
+# `pip install -e . --no-build-isolation`, so no download is needed offline).
+RUN pip install --no-cache-dir "setuptools>=68" wheel
+
 # Compile ur_rtde against apt Boost (cached layer).
 RUN pip install --no-cache-dir "ur_rtde==1.6.3"
 
-# Viewer deps (meshcat web 3D + numpy for FK).
-RUN pip install --no-cache-dir meshcat numpy
+# Viewer deps: viser (browser 3D + GUI, pure-Python wheel, same on arm64/amd64),
+# trimesh (STL/OBJ/GLB loading), numpy for FK. Pinned to the versions the viewer
+# was built against (2026-10-28).
+RUN pip install --no-cache-dir "viser==1.1.1" "trimesh==5.2.0" numpy
 
 WORKDIR /workspace
 

@@ -1,7 +1,7 @@
 """Student-facing robot API — the base functions student projects build on.
 
-STATUS: experimental. This is the surface that will BECOME the stable student
-framework once validated on hardware; it is NOT yet validated for student use.
+STATUS: validated for student use in simulation (HS26). Real-arm motion is gated:
+target="real" needs allow_real=True, a validated profile and set_tool() first.
 
 This is the only module students should need. It wraps the lower-level
 connection / safety / motion / IO plumbing behind a small, friendly API:

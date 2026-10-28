@@ -64,7 +64,7 @@ chosen over binary for debuggability and easy resync (skip any line that isn't
 - **RS485 pair:** MAX3485 A→tool **White (RS485+)**, B→tool **Brown (RS485-)**.
   Swap if the host sees garbled/no data (polarity).
 
-Firmware + wiring table: `Framework/ur5e_framework/toolhead/examples/rgb_button_rs485/`.
+Firmware + wiring table: `Framework/ur5e_framework/internal/toolhead_rs485/examples/rgb_button_rs485/`.
 
 ## UR-side preconditions (manual, one-time in PolyScope)
 

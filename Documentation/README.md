@@ -18,6 +18,8 @@ This folder mirrors the project's Notion research log. Each file is one major se
 8. [Student-Facing Motion API Design](08-motion-api-design.md) — three-layer API, orientation, waypoints, naming
 9. [Tool I/O — Electrical Interface](09-tool-io-electrical-interface.md) — 8-pin connector, pinout, power budget, framework mapping
 10. [Toolhead RGB + Button over RS485 / TCI](10-toolhead-rgb-rs485-interface.md) — APDS9960 + button Arduino toolhead, TCI :54321 host receive, live viz + button-gated motion
+11. [Viewer as simulation workspace](11-viewer-scenes-and-safety-planes.md) — viser rebuild, UR5e meshes + FK verification, student scene objects + toolhead/TCP, `scene.json` format, safety planes in PolyScope terms (display only)
+12. [Student repo, prebuilt image and release workflow](12-student-repo-and-release.md) — `UR5-PCL-EmbodiedInteraction` layout, `ghcr.io/reckj/ur5e-dev:hs26.1` multi-arch image, sync script, URSim 5.25.2 verification, Remote-Control / entrypoint / DI-input findings
 
 ## About this documentation
 

@@ -8,7 +8,7 @@ REAL-ARM ONLY (live source)
       - the "rs485" ToolComm Forwarder URCap installed on the controller,
       - Tool Communication enabled in the Installation tab (baud/parity must
         match the toolhead firmware), and
-      - the toolhead Arduino streaming frames (see toolhead/examples/).
+      - the toolhead Arduino streaming frames (see internal/toolhead_rs485/examples/).
     URSim has NO tool RS485, so there is no simulation path for this link.
     Use `MockToolSource` to develop the host side (parser, viz, motion logic)
     fully offline.

@@ -1,6 +1,6 @@
 """Validated motion primitives.
 
-STATUS: experimental / internal. NOT validated for student use.
+STATUS: HS26 student framework, lower layer (sim-validated). Students use ur5e.Robot.
 
 Wraps a connected RobotConnection with a SafetyLimits profile. Every motion is
 validated against the profile and REJECTED (raises SafetyViolation) on any

@@ -1,6 +1,7 @@
 """Safety limits — the framework's SECONDARY software guardrail.
 
-STATUS: experimental / internal.
+STATUS: HS26 student framework, lower layer (sim-validated; cart_against_wall box
+captured on the real cell).
 
 IMPORTANT: this is NOT the robot's safety system. The authoritative, certified
 safety layer is the robot's PolyScope Safety Configuration (joint limits, TCP

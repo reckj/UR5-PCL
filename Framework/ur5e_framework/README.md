@@ -17,6 +17,11 @@ src/ur5e/
   config.py       # named targets: sim / real (env-overridable hosts)
 scripts/
   check_connection.py   # receive-only connectivity check (no motion)
+  rtde_viewer.py        # browser 3D viewer + scene editor (viser), receive-only
+  verify_viewer_fk.py   # checks the viewer's mesh chain against the DH FK
+src/ur5e/viewer/        # viewer implementation + vendored UR5e meshes (BSD-3)
+scenes/                 # viewer scenes: scenes/<name>/scene.json + models/
+toolheads/              # toolhead presets shared by all scenes: toolheads/<id>/toolhead.json + mesh
 notebooks/
   01_explore.py   # exploration entry point (VS Code cells / Jupyter)
 Dockerfile, docker-compose.yml, entrypoint.sh   # dev environment
@@ -67,7 +72,7 @@ python scripts/check_connection.py --target real
 Expected: robot mode, joint angles, TCP pose, then a clean disconnect.
 Receive-only — never commands motion.
 
-## Seeing the arm move
+## Seeing the arm move — viewer + scene editor (experimental)
 
 The default `ur_rtde` control interface uploads a script over the network, which
 the UR controller only permits in **Remote Control** mode — and Remote Control
@@ -82,15 +87,39 @@ a control script.
 ```bash
 # Start URSim + the viewer:
 docker compose up -d ursim viewer
-# Open http://localhost:7001/static/ in your browser (orbit/zoom with the mouse).
+# Open http://localhost:7001/ in your browser (orbit/zoom with the mouse).
 
 # In another shell, run a control script and watch it move in the browser:
 docker compose run --rm dev bash
 python scripts/smoke_test_move.py
 ```
 
-The viewer renders the UR5e as a kinematic skeleton (link segments + joint
-markers) from DH parameters — enough to see pose and motion, not a CAD mesh.
+The viewer (`scripts/rtde_viewer.py` → `src/ur5e/viewer/`, built on
+[viser](https://github.com/nerfstudio-project/viser)) renders the UR5e with its
+real link meshes (from Universal Robots' `ur_description`, BSD-3), the Base and
+tool0/TCP frames and a metric grid. Around the arm it is a small **simulation
+workspace**:
+
+- load your own STL/OBJ/GLB models (table, fixtures, work pieces; mm or m) and
+  place them with a drag gizmo or numeric fields,
+- attach a toolhead mesh to the flange with a TCP offset in the same numbers
+  PolyScope's *Installation → TCP* takes — or pick a preset from the shared
+  `toolheads/<id>/` library (mesh + offset + TCP), e.g. `tool_example`,
+- draw **safety planes** in the vocabulary of *Installation → Safety → Planes*
+  (copy feature, displacement, restriction mode, restrict elbow) so you can type
+  them into the pendant 1:1; a plane turns red when TCP/elbow cross it.
+
+Everything is saved as a *scene*: `scenes/<name>/scene.json` plus the model files
+next to it, so a scene folder can be committed or AirDropped as one unit.
+The viewer starts on the `default` scene; switch scenes in the page (Scene
+panel). To start on another scene, put `VIEWER_SCENE=my_table` in a `.env` file
+next to `docker-compose.yml` (works on macOS/Windows/Linux). `--no-robot` runs
+it without URSim (joint sliders).
+
+> **Nothing in the viewer limits or protects the robot.** Safety planes there
+> are a planning sketch; the controller's Safety Configuration is authoritative.
+> Status: experimental / internal, not validated for student use. Details and
+> the scene file format: `Documentation/11-viewer-scenes-and-safety-planes.md`.
 
 ## Student-facing API (`ur5e.robot`)
 

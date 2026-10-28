@@ -1,6 +1,7 @@
-"""ur5e — UR5e research/teaching framework (experimental / internal).
+"""ur5e — UR5e teaching framework (ZHdK Embodied Interaction HS26).
 
-NOT validated for student use. Upstream toolbuilding only.
+Student-facing surface: ``Robot``, ``grid_poses``, ``line_poses`` — validated for
+student use in simulation (HS26). Real-arm motion stays gated (see motion.py).
 """
 
 from __future__ import annotations

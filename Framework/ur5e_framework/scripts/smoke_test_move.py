@@ -1,6 +1,6 @@
 """Control-interface smoke test — SIMULATION ONLY.
 
-STATUS: experimental / internal. NOT validated for student use.
+STATUS: HS26 student framework — sim-only smoke test (sim-validated).
 
 Confirms RTDEControlInterface can connect and command a small joint-space move
 against URSim, then return to start. Uses receive + control.

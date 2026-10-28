@@ -1,6 +1,6 @@
 """RTDE connection layer for the UR5e.
 
-STATUS: experimental / internal. NOT validated for student use.
+STATUS: HS26 student framework, lower layer (sim-validated). Students use ur5e.Robot.
 
 This is the single sim<->real swap point for the whole framework. The same
 object targets URSim or the real arm; only `host` differs. Code written

@@ -1,0 +1,20 @@
+# Dev-only override: build the dev/viewer image locally from ./Dockerfile and
+# tag it with the SAME name the student compose file pulls. Not synced to the
+# student repo. Usage (dev repo only):
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml build
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d ursim viewer
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml run --rm dev bash
+#
+# Or once per shell:  export COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml
+# and then plain `docker compose ...`.
+#
+# Publishing the multi-arch image to ghcr.io is a separate buildx step — see
+# RELEASING.md. Keep the tag here in sync with docker-compose.yml.
+services:
+  dev:
+    build: .
+    image: ghcr.io/reckj/ur5e-dev:hs26.1
+  viewer:
+    build: .
+    image: ghcr.io/reckj/ur5e-dev:hs26.1
