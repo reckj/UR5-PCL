@@ -139,6 +139,22 @@ Safari/Chrome gizmo + upload; a `.urp` saved in the 5.9.4 sim loaded on the
 - Safety model unchanged: no new safety rules or warnings added beyond the
   existing texts.
 
+## Lab network — first real connection (2026-10-29)
+
+First `check_connection.py --target real` from the lab Mac hung and then
+reported `Could not connect to: 192.168.1.11 at 30004`. Cause: the Mac's
+Ethernet adapter had a manual `192.168.10.10/24` — a different subnet from the
+robot's static `192.168.1.11/24`. Setting the Mac to `192.168.1.20/24` fixed it;
+RTDE receive-only works from inside the dev container with no Docker changes.
+
+Facts for the record: the robot's wired network has **no DHCP**; every laptop
+needs a manual `192.168.1.x/24` address (students: `.1NN`, instructor `.20`).
+Diagnostic rule now in the student docs: *refused* immediately = host reachable,
+service down (URSim off); *hangs* = address unreachable (wrong subnet / cable).
+Documented in student repo `e90c704` (USAGE §4 block, SETUP troubleshooting,
+README, context/KNOWLEDGE). Assumption to verify: that there is really no DHCP
+on the lab switch — if there is, the manual-IP step can be dropped.
+
 ## Release steps for tonight (see RELEASING.md)
 
 1. Check the diff in the dev repo (status lines, Dockerfile, entrypoint,
