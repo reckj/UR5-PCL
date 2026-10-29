@@ -79,3 +79,34 @@ edge and was rejected → values clamped onto the edge.
 - Draw the taught box in the viewer (would make the fractions visible).
 - `Orientation` presets; blend radius for `move_through` (both in the design
   doc 08, not implemented).
+
+## Addendum 2026-10-29 — `--target real` on every example
+
+First lab attempt: `grid_process.py --target real` silently ignored the flag
+(no argparse, `Robot(target="sim")` hard-coded) and talked to the still-running
+URSim ("Please enable remote control"). Fix, needed for the session:
+
+- `src/ur5e/cli.py` — `argument_parser(doc)` (`--target sim|real`, `--host`,
+  `--workspace FILE`, `--payload KG`, `--tcp X Y Z RX RY RZ`) and
+  `robot_kwargs(args)`; for `real` it adds `allow_real=True, payload_kg, tcp`
+  (defaults 0 kg / flange = nothing mounted) and exits with a hint if neither
+  `UR_HOST` nor `--host` is set. Thin glue, no robot logic.
+- `Robot(..., payload_kg=None, tcp=None)` — applied via `set_tool` in
+  `connect()`; `target="real"` prints `[ur5e] REAL ARM host — profile,
+  payload, TCP` once. `Robot.target` attribute added.
+- All templates 01–09 and `grid_process.py` use the two cli lines; `TARGET`
+  constants gone. `09_raw_rtde` refuses `--target real` as before.
+  `grid_process` still anchors at the current pose (unchanged behaviour,
+  documented: freedrive over the table first).
+- Docs: templates README (flags + "On the real arm" lab order), USAGE §3/§4,
+  SETUP troubleshooting, context KNOWLEDGE/INSTRUCTIONS, snapshot regenerated.
+  `check_connection.py` docstring IP corrected to .11 (dev source).
+
+Decision: the command-line flag *is* the conscious act that opens the gate —
+the gate itself (allow_real + validated profile + payload + TCP) is unchanged.
+Verified in URSim 5.9.4 (sandbox): all ten scripts in sim; `--target real`
+paths: sim-taught workspace → `WorkspaceError`, 09 → refused, no `UR_HOST` →
+hint; `--host ursim --target real` prints the REAL ARM line and the default
+`cart_against_wall` box rejects the sim pose (expected). Real-arm run still
+open — first thing in the lab: arm over the table (the parked pose seen today,
+x −0.516 / z 0.238, is outside the cell box), `00 --target real`, `01`, `03`.
