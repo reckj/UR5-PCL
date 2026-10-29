@@ -110,3 +110,20 @@ hint; `--host ursim --target real` prints the REAL ARM line and the default
 `cart_against_wall` box rejects the sim pose (expected). Real-arm run still
 open — first thing in the lab: arm over the table (the parked pose seen today,
 x −0.516 / z 0.238, is outside the cell box), `00 --target real`, `01`, `03`.
+
+## Addendum 2026-10-29 (lab) — cell z max 0.60 m, clipping made visible
+
+First real teach: box x −0.487…−0.255, y −0.251…0.186, z 0.107…0.568 m, home
+joints [−137.9, −72.5, −94.7, −95.5, 92.0, −128.1]°. `01_read_state` worked
+(after one "Failed to start control script" on the first try — pendant was
+still switching to Remote); `02` rejected `move_joints(home_joints)`: the
+cell profile's captured z max was 0.234 m, so the intersection cut home/top off.
+Decision (John): **`cart_against_wall` z max → 0.60 m**; x/y, speeds, PolyScope
+planes unchanged. Assumption: nothing above the table within 60 cm in that area.
+
+Also fixed: `Workspace.pose/grid/line` now generate inside `usable_box`
+(taught ∩ cell) instead of the taught box — corner A was taught 2 mm beyond
+the cell's x min and `pose(0, …)` would have been rejected; `describe()` prints
+a `!! clipped` line with the usable box and names taught points outside the
+cell. Verified in the sandbox against the real workspace.json (old and new z
+max). Student `3fa684c`.
