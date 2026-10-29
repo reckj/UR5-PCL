@@ -127,3 +127,17 @@ the cell's x min and `pose(0, …)` would have been rejected; `describe()` print
 a `!! clipped` line with the usable box and names taught points outside the
 cell. Verified in the sandbox against the real workspace.json (old and new z
 max). Student `3fa684c`.
+
+## Addendum 2026-10-29 (lab, 2) — FK tolerance for joint targets
+
+After the z-max change `02` still rejected `move_joints(home_joints)`:
+`joint target (flange FK) (-0.359, -0.15, 0.568)` vs box top 0.5681. The
+nominal DH FK of the taught home joints lands 0.2 mm above the controller's
+recorded pose (deltas measured on the lab arm: −0.48 / +1.0 / +0.21 mm) —
+calibrated vs nominal kinematics. Any point taught *as* a box corner sits on
+the edge, so the joint check needs slack: `Box.contains(p, tol)`,
+`FK_TOLERANCE_M = 0.005` applied in `check_joint_target` only; `move_to`
+targets stay exact. Error text now says which check fired. Verified: real
+workspace.json home accepted, wrong joint target rejected, Cartesian 0.5 mm
+over the top rejected; templates 02/03/04/05/08 + grid_process green in URSim.
+Student `d4bc79f`.
