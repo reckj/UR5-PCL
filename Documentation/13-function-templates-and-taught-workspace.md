@@ -141,3 +141,28 @@ targets stay exact. Error text now says which check fired. Verified: real
 workspace.json home accepted, wrong joint target rejected, Cartesian 0.5 mm
 over the top rejected; templates 02/03/04/05/08 + grid_process green in URSim.
 Student `d4bc79f`.
+
+## Addendum 2026-11-03 — workspace taught from 8 corners, box = largest box that fits inside
+
+Decided with JReck: the taught box is no longer the bounding box of four
+points (corner A, corner B, top, home) but the **largest axis-aligned box that
+fits inside eight taught corners** — four low corners walked around the area
+on the surface, four high corners at the ceiling, plus home (which must lie
+inside the box). Per axis the box runs from the highest of the four low values
+to the lowest of the four high values (`ur5e.workspace.inner_box`). For an
+area aligned with the base axes this is exactly the taught rectangle; for a
+rotated or tilted one it shrinks and never reaches outside the corners —
+`describe()` prints the corner span when that happens. Degenerate cases (a
+corner not moved, corners mixed up, area rotated so far that no ≥ 20 mm box
+fits) are refused with a plain message.
+
+`00_teach_workspace.py` now has 9 steps. File format `ur5e-workspace/2`
+(`corners_low`, `corners_high`, `home`, `home_joints`); `/1` files still load
+and give the identical box as before (their bounding box is synthesised into
+eight corners). `ws.corner_a / corner_b / top` remain as read-only aliases.
+Verified offline: aligned, 10°-rotated (all inner corners inside the taught
+area), tilted-table, home-outside and v1 round-trip cases.
+
+Student repo: `context/KNOWLEDGE.md` updated in place; run
+`sync_to_student_repo.sh` + `context/make_source_snapshot.sh` for `workspace.py`,
+the teach template and the READMEs.
