@@ -79,7 +79,8 @@ rsync -a "${DRY[@]}" "$SRC/docker-compose.yml"  "$DST/docker-compose.yml"
 # image), docker-compose.dev.yml, RELEASING.md, this script, README.md,
 # STUDENT_SETUP.md, notebooks/, internal/, programs/*, src/ur5e/toolio/,
 # scripts/{first_real_move,profile_move_real,teach_workspace,grid_di0_test,
-# grid_di_test,safe_move_demo,verify_viewer_fk,toolhead_rgb_selftest}.py,
+# grid_di_test,safe_move_demo,verify_viewer_fk,toolhead_rgb_selftest,
+# teach_cart_cell,verify_cart_cell}.py,
 # examples/toolhead_rgb_motion.py.
 
 echo
