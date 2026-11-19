@@ -29,7 +29,8 @@ Usage (dev shell; real arm: -e UR_HOST=192.168.1.11)
 
 Optional, with any of the above
     --side-clearance 0.05   distance the tool keeps from the cart sides (m)
-    --arm-radius 0.06       distance the arm links keep from the cart (m)
+    --arm-clearance 0.0     extra distance the arm links keep from the cart, on top of
+                            their own radii (m); 0 = the modelled link may touch
     --flange-floor 0.25     only if the pendant gets a floor plane again: its height
                             above the floor (m); it limits the FLANGE (cart_360: none)
     --reach X0 X1 Y0 Y1     outer box for the TCP (m); shrink a side when a wall
@@ -140,8 +141,8 @@ def report(d: dict) -> str:
          f"    (cart height {(cart['top_z'] - d['floor_z']) * 1000:.0f} mm)",
          *[f"  + {e['name']:<14} x {mm(e['x'][0])} .. {mm(e['x'][1])}   y {mm(e['y'][0])} .. {mm(e['y'][1])}"
            f"   z {mm(e['z'][0])} .. {mm(e['z'][1])} mm" for e in d.get("extras", [])],
-         f"  software         tool keeps {d['side_clearance'] * 1000:.0f} mm from the cart sides, arm links "
-         f"{d['arm_radius'] * 1000:.0f} mm;",
+         f"  software         tool line keeps {d['side_clearance'] * 1000:.0f} mm from the cart sides; arm links (real "
+         f"radii) keep {d.get('arm_clearance', 0.01) * 1000:.0f} mm;",
          f"                   above the floor: TCP {d['floor_clearance'] * 1000:.0f} mm, arm links clear of it"
          + (f", flange {d['flange_floor_clearance'] * 1000:.0f} mm (= the pendant's floor plane)"
             if d.get("flange_floor_clearance") is not None else ""),
@@ -239,7 +240,7 @@ def main() -> None:
     ap.add_argument("--height", type=float, help="with --set: cart height floor -> top in metres")
     ap.add_argument("--top-z", type=float, default=0.0, help="with --set: z of the cart top (default 0 = mounting plane)")
     ap.add_argument("--side-clearance", type=float)
-    ap.add_argument("--arm-radius", type=float)
+    ap.add_argument("--arm-clearance", type=float)
     ap.add_argument("--flange-floor", type=float, help="height of the pendant's floor plane above the floor (m)")
     ap.add_argument("--reach", type=float, nargs=4, metavar=("X0", "X1", "Y0", "Y1"))
     ap.add_argument("--z-max", type=float)
@@ -276,7 +277,7 @@ def main() -> None:
             print("!! 'extras' (handle, plate ...) in the cell file were kept as they are — check that "
                   "they still fit the new cart numbers (edit src/ur5e/cells/cart_360.json).")
         changed = True
-    for key, val in (("side_clearance", args.side_clearance), ("arm_radius", args.arm_radius),
+    for key, val in (("side_clearance", args.side_clearance), ("arm_clearance", args.arm_clearance),
                      ("flange_floor_clearance", args.flange_floor)):
         if val is not None:
             d[key] = val

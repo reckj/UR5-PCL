@@ -16,7 +16,7 @@
   },
   "floor_z": -0.8,
   "side_clearance": 0.02,
-  "arm_radius": 0.06,
+  "arm_clearance": 0.0,
   "floor_clearance": 0.05,
   "reach": {
     "x": [

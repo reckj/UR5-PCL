@@ -163,7 +163,25 @@ def ik_near(pose, q_near, tcp=None, max_iter=80, tol_pos=1e-5, tol_rot=1e-5):
 # the same numbers the viewer's robot_model uses). Nominal geometry, no calibration.
 UPPER_ARM_OFFSET = 0.138
 FOREARM_OFFSET = 0.007
-_SPHERE_STEP = 0.04          # spacing of sample points along a link (m)
+_SPHERE_STEP = 0.02          # spacing of sample points along a link (m)
+
+# Link radii (m), measured on the UR5e link meshes shipped with the viewer
+# (viewer/assets/ur5e/*.glb, ur_description 4.4.0) — 2026-11-19:
+#   upper arm  tube r 43 mm between 95 and 330 mm from the shoulder axis,
+#              collar r 58 mm towards the elbow; the shoulder-side collar and
+#              joint cap stay within 95 mm of the shoulder and are not modelled
+#              (they never get lower than ~10 mm above the mounting plane)
+#   elbow      joint housing r 60 mm around the elbow axis, from 50 mm on the
+#              forearm side to 210 mm on the upper-arm side of the DH plane
+#   forearm    collar r 48 mm up to 85 mm from the elbow axis, tube r 38 mm up
+#              to 350 mm, then the wrist-1 housing
+#   wrists     housings r 39..45 mm
+R_UPPER_TUBE = 0.043
+R_UPPER_COLLAR = 0.058
+R_ELBOW = 0.062
+R_FOREARM_COLLAR = 0.048
+R_FOREARM_TUBE = 0.038
+R_WRIST = 0.045
 
 
 def _along(a, b, step=_SPHERE_STEP):
@@ -171,30 +189,42 @@ def _along(a, b, step=_SPHERE_STEP):
     return [a + (b - a) * (i / n) for i in range(n + 1)]
 
 
-def arm_spheres(q, radius=0.06):
-    """Sample points on the centre lines of the moving links for joint angles q
-    (base frame, metres), as a list of (link name, xyz). A link is treated as
-    the set of spheres of `radius` around its points. Covered: upper arm,
-    elbow, forearm, wrist 1, wrist 2, wrist 3. NOT covered: base and shoulder
-    (fixed on the mount) and whatever is mounted on the flange (see
-    SafetyLimits.check_arm, which adds the flange->TCP line).
+def arm_spheres(q, clearance=0.0):
+    """The moving links for joint angles q as spheres: a list of
+    (link name, centre xyz, radius) in the base frame, metres. Radii are the
+    links' own radii (see above) plus `clearance`. Covered: upper arm (from
+    95 mm beyond the shoulder axis), elbow, forearm, wrist 1, wrist 2, wrist 3.
+    NOT covered: base and shoulder (fixed on the mount) and whatever is mounted
+    on the flange (see SafetyLimits.check_arm, which adds the flange->TCP line).
 
     Wrist 3 ends in the flange FACE: its last sphere sits one radius behind the
     flange, so the spheres reach exactly to the flange plane, not beyond it."""
     T = fk_frames(q)
     P = [t[:3, 3] for t in T]
     side = T[1][:3, 2]                       # shoulder-lift axis = lateral direction of the arm
+    c = float(clearance)
     out = []
-    a, b = P[1] + side * UPPER_ARM_OFFSET, P[2] + side * UPPER_ARM_OFFSET
-    out += [("upper arm", p) for p in _along(a, b)[1:]]            # [0] is the shoulder itself
-    out += [("elbow", p) for p in _along(P[2] + side * UPPER_ARM_OFFSET, P[2] + side * FOREARM_OFFSET)]
-    out += [("forearm", p) for p in _along(P[2] + side * FOREARM_OFFSET, P[3] + side * FOREARM_OFFSET)]
-    out += [("wrist 1", p) for p in _along(P[3], P[4])]
-    out += [("wrist 2", p) for p in _along(P[4], P[5])]
+
+    u = (P[2] - P[1]) / np.linalg.norm(P[2] - P[1])              # along the upper arm
+    a = P[1] + side * UPPER_ARM_OFFSET
+    out += [("upper arm", p, R_UPPER_TUBE + c) for p in _along(a + u * 0.095, a + u * 0.330)]
+    out += [("upper arm", p, R_UPPER_COLLAR + c) for p in _along(a + u * 0.335, a + u * 0.365)]
+    out += [("elbow", p, R_ELBOW + c) for p in _along(P[2] - side * 0.030, P[2] + side * 0.190)]
+
+    f = (P[3] - P[2]) / np.linalg.norm(P[3] - P[2])              # along the forearm
+    b = P[2] + side * FOREARM_OFFSET
+    out += [("forearm", p, R_FOREARM_COLLAR + c) for p in _along(b + f * 0.060, b + f * 0.085)]
+    out += [("forearm", p, R_FOREARM_TUBE + c) for p in _along(b + f * 0.090, b + f * 0.350)]
+    out += [("forearm", p, R_WRIST + c) for p in _along(b + f * 0.355, b + f * 0.392)]
+
+    out += [("wrist 1", p, R_WRIST + c) for p in _along(P[3] - side * 0.005, P[4])]
+    z4 = (P[5] - P[4]) / np.linalg.norm(P[5] - P[4])
+    out += [("wrist 2", p, R_WRIST + c) for p in _along(P[4] - z4 * 0.010, P[5])]
     z6 = T[6][:3, 2]
-    end = P[6] - z6 * radius
-    if float(np.dot(end - P[5], z6)) > 0:
-        out += [("wrist 3", p) for p in _along(P[5], end)]
+    r3 = R_WRIST + c
+    start, end = P[5] - z6 * 0.005, P[6] - z6 * r3
+    if float(np.dot(end - start, z6)) > 0:
+        out += [("wrist 3", p, r3) for p in _along(start, end)]
     else:
-        out.append(("wrist 3", P[5]))
+        out.append(("wrist 3", P[5], r3))
     return out

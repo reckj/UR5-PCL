@@ -1,5 +1,13 @@
 # `cart_360` — safety setup for the arm on the free-standing cart (2026-11-18) 🟡
 
+**Update 2026-11-19, 12:00 — arm model refined after the first real-arm
+session** (JReck: "worked well", but the 60 mm arm clearance kept groups from
+reaching low enough). Links now carry their real radii and are tested by true
+distance to the keep-outs; `arm_clearance` is 0 mm. Reference from the lab arm:
+base 0°, shoulder −222° clears the cart's back edge with roughly 10 mm of real
+gap — the model accepts down to −222.6° there. 46 offline checks PASS; not
+re-run in URSim or on the arm yet. Details under *Software layer*.
+
 **Status (2026-11-18, 10:55): 🟢 sim-validated, unlocked for the real arm.**
 44 offline checks PASS (`scripts/verify_cart_cell.py`, also inside the dev
 container); live run against URSim 5.9.4 with the measured cell: all PASS,
@@ -59,8 +67,10 @@ top surface**. One setup serves all groups.
   100 mm below the top (150 mm/s); it is removed. Normal-mode limits apply
   everywhere.
 - **Tool clearance to the cart sides 20 mm** (JReck, 2026-11-18; first draft
-  50 mm). Arm-link radius stays 60 mm — the tubes are about 40–45 mm in radius,
-  so that is roughly the same 15–20 mm of air.
+  50 mm).
+- **Arm links: real radii, no extra clearance** (JReck, 2026-11-19; before:
+  one 60 mm sphere radius for every link, grown-box test). The modelled arm may
+  come right up to the cart.
 - **Nothing else is within the arm's reach** where the cart stands (JReck) →
   no outer planes, `reach` box left at ±0.95 m.
 - **One source for the geometry**: `src/ur5e/cells/cart_360.json` (cart
@@ -80,7 +90,7 @@ top surface**. One setup serves all groups.
 |---|---|---|
 | floor | no plane | TCP ≥ 50 mm above the floor, arm links above the floor |
 | planes | **none** | — |
-| cart body, handle, plate | not expressible with planes | keep-outs: tool ≥ 20 mm from their sides and undersides (tops may be touched), arm links ≥ 60 mm all round |
+| cart body, handle, plate | not expressible with planes | keep-outs: tool line ≥ 20 mm from their sides and undersides (tops may be touched); arm links at their real radii, 0 mm extra |
 | speed | 250 mm/s tool (most-restrictive preset), everywhere | TCP ≤ 150 mm/s, joints ≤ 0.5 rad/s |
 | force | 100 N tool / elbow (preset) | — |
 | outer boundary | none (nothing within reach); add a plane per side if that changes | TCP box ±0.95 m, z up to 1.0 m (`reach` in the cell file) |
@@ -94,12 +104,29 @@ the keep-out and ceilings are inherited):
 | move | checked before anything is sent |
 |---|---|
 | `move_to` / `move_through` (moveL) | target TCP; the straight TCP line start → target; the flange line; the tool line flange → TCP at the target; flange height; arm links at up to 12 points along the line, joint angles from the framework's own inverse kinematics (`kinematics.ik_near`: nominal model, iterated from the current joints and chained point to point, so it follows the branch the linear move takes) |
-| `move_joints` (moveJ) | target as above via forward kinematics; arm links and tool line every ≤ 3° of the largest joint travel between the current and the target joints |
+| `move_joints` (moveJ) | target as above via forward kinematics; arm links and tool line every ≤ 1° of the largest joint travel between the current and the target joints |
 
-Arm links = spheres of 60 mm radius along the physical centre lines (upper arm
-with its 138 mm lateral offset, elbow, forearm, wrist 1–3; same geometry as the
-viewer's mesh chain, compared numerically). A violation raises
-`SafetyViolation` naming the link or line and the point; nothing is clamped.
+Arm links = spheres every 20 mm along the physical centre lines (upper arm with
+its 138 mm lateral offset, elbow, forearm, wrist 1–3; same chain as the
+viewer's meshes), each with the **link's own radius** measured on those meshes
+(2026-11-19): upper-arm tube 43 mm (95–330 mm from the shoulder axis), its
+elbow-side collar 58 mm, elbow housing 62 mm, forearm collar 48 mm, forearm
+tube 38 mm, wrist housings 45 mm; plus `arm_clearance` from the cell file
+(0 mm). A sphere violates when its **distance** to a keep-out box is smaller
+than its radius — a true distance, so a link can pass diagonally over an edge
+as close as it physically can (the first version grew the box by the radius,
+which over-stated the keep-out by up to 40 % at edges). The shoulder-side collar
+and joint cap of the upper arm (within 95 mm of the shoulder axis) are not
+modelled; they never get lower than about 10 mm above the mounting plane. A
+violation raises `SafetyViolation` naming the link or line and the point;
+nothing is clamped.
+
+Calibration point (lab arm, JReck 2026-11-19): base 0°, shoulder −222° — upper
+arm about 10 mm from the cart's back top edge. Model: accepted to −222.6°,
+`would touch` beyond. So at that edge the model is about 8–10 mm on the
+cautious side of reality; no such measurement exists for the other edges.
+Model limits with elbow straight: over the sides (345 mm from the axis)
+shoulder ≈ −198°, over the front (566 mm) ≈ −193°.
 
 **Not checked:** the shape of the mounted tool beyond the flange → TCP line
 (a wide gripper body is not modelled), cables, objects standing next to the
@@ -176,7 +203,7 @@ on the robot network.
     `context/` files are already in the student clone's working tree.
 
 Tuning without re-measuring: `teach_cart_cell.py --side-clearance …
---arm-radius … --flange-floor … --reach X0 X1 Y0 Y1 --z-max …`. Any new
+--arm-clearance … --flange-floor … --reach X0 X1 Y0 Y1 --z-max …`. Any new
 geometry resets `validated` to false.
 
 ## For the students
@@ -188,8 +215,8 @@ what not to do), referenced from `AGENTS.md`, `CLAUDE.md`,
 `.github/copilot-instructions.md`, `context/README.md`, INSTRUCTIONS §4 and
 KNOWLEDGE §6. Existing
 `workspace.json` files over the table keep working (they lie inside the new
-cell); only poses with a wrist or forearm closer than 60 mm to the cart top
-are newly rejected. To work beside the cart, a group teaches a workspace
+cell); only poses where the modelled arm would touch the cart top are newly
+rejected. To work beside the cart, a group teaches a workspace
 there, or uses absolute poses with `Robot(target="real", …)`.
 
 ## Assumptions flagged
@@ -204,7 +231,13 @@ there, or uses absolute poses with `Robot(target="real", …)`.
   longer than 200 mm (JReck).
 - Clearance 20 mm is measured from the **line** flange → TCP, not from the
   tool's body: a tool wider than about 40 mm can touch the cart side while the
-  check still passes. Arm links 60 mm from their centre line.
+  check still passes.
+- **Arm links have no software margin** (`arm_clearance` 0): the check stops
+  where the *modelled* arm touches the *drawn* cart. Nominal kinematics, mesh
+  radii, the cart drawing and the 20 mm sphere spacing are each good to a few
+  mm, so real contact at the limit is possible; one measured point (back edge)
+  shows about 10 mm of real gap. The pendant's force limit is what acts then.
+  `teach_cart_cell.py --arm-clearance 0.01` puts a margin back.
 - The one group's table on the +Y side (and anything else standing next to the
   cart) is not modelled; reaching under it is checked against the cart and the
   floor only.
@@ -218,8 +251,8 @@ there, or uses absolute poses with `Robot(target="real", …)`.
 | file | change |
 |---|---|
 | `src/ur5e/cells/cart_360.json` | new — cell geometry (cart, `extras`: handle + mounting plate, floor, clearances) + `validated` flag (format `ur5e-cell/1`) |
-| `src/ur5e/safety.py` | `KeepOut`, `Box.segment_inside`, `SafetyLimits.keepout / arm_radius / floor_z / flange_min_z` (the last one unused by `cart_360`), `check_arm`, `check_joint_path`, `check_linear_path`, `describe()`, `load_cell`, `cart_profile`, profile `cart_360` |
-| `src/ur5e/kinematics.py` | `arm_spheres`, `ik_near`, rotation-vector helpers, `interpolate_pose`, `flange_position_from_pose` |
+| `src/ur5e/safety.py` | `KeepOut`, `Box.segment_inside`, `SafetyLimits.keepout / arm_clearance / floor_z / flange_min_z` (the last one unused by `cart_360`), `check_arm`, `check_joint_path`, `check_linear_path`, `describe()`, `load_cell`, `cart_profile`, profile `cart_360` |
+| `src/ur5e/kinematics.py` | `arm_spheres` (per-link radii), `ik_near`, rotation-vector helpers, `interpolate_pose`, `flange_position_from_pose` |
 | `src/ur5e/motion.py` | path checks for profiles with a keep-out (linear moves via `ik_near`) |
 | `src/ur5e/config.py` | `cell_profile_name` (moved here), `REAL_CELL_DEFAULT = "cart_360"`, `UR5E_CELL` accepts any profile name |
 | `src/ur5e/workspace.py`, `robot.py`, `cli.py` | use `cell_profile_name`; `--cell NAME`; `describe()` notes a box reaching into the keep-out |

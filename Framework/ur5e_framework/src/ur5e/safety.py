@@ -26,7 +26,8 @@ profile is validated; sim motion is allowed (geometry checks still run).
 
 What a profile with a keep-out checks (and what not) — see SafetyLimits:
   target TCP, the straight TCP line of a linear move, the flange->TCP line, and
-  the arm links as spheres (upper arm .. wrist 3) at sampled joint positions.
+  the arm links as spheres with their real radii (upper arm .. wrist 3) at
+  sampled joint positions.
   NOT checked: the shape of the mounted tool beyond that one line, cables,
   anything standing next to the cart, and people.
 """
@@ -66,6 +67,16 @@ class Box:
         return (self.x[0] < p[0] < self.x[1] and self.y[0] < p[1] < self.y[1]
                 and self.z[0] < p[2] < self.z[1])
 
+    def distance(self, p) -> float:
+        """Shortest distance from point p to the box (0 if p is inside or on it)."""
+        d2 = 0.0
+        for (lo, hi), v in zip((self.x, self.y, self.z), p):
+            if v < lo:
+                d2 += (lo - v) ** 2
+            elif v > hi:
+                d2 += (v - hi) ** 2
+        return math.sqrt(d2)
+
     def segment_inside(self, a, b):
         """A point of the straight segment a->b that lies in the box INTERIOR,
         or None if the segment stays outside (touching a face is outside)."""
@@ -97,8 +108,10 @@ class KeepOut:
                  NOT at the top: the TCP and the flange->TCP line may touch the
                  top surface (table work) but must stay `side_clearance` away
                  from the sides and the underside.
-      arm zone   the box grown by the arm radius on all sides: no arm link
-                 (upper arm .. wrist 3) may come closer than that.
+      arm        every link sphere must stay further from the box than its
+                 radius (+ the profile's arm_clearance) — a true distance, so
+                 a link may pass diagonally over an edge as close as it
+                 physically can.
     """
     name: str
     box: Box
@@ -110,11 +123,6 @@ class KeepOut:
         b = self.box
         return Box(x=(b.x[0] - c, b.x[1] + c), y=(b.y[0] - c, b.y[1] + c),
                    z=(b.z[0] - c, b.z[1] - self.top_tolerance - shrink))
-
-    def arm_zone(self, radius: float) -> Box:
-        b = self.box
-        return Box(x=(b.x[0] - radius, b.x[1] + radius), y=(b.y[0] - radius, b.y[1] + radius),
-                   z=(b.z[0] - radius, b.z[1] + radius))
 
     def describe(self) -> str:
         b = self.box
@@ -151,7 +159,8 @@ class SafetyLimits:
     validated: bool = False
     # Solid bodies next to the arm (the cart). Empty = no keep-out checks at all.
     keepout: tuple = ()               # tuple[KeepOut, ...]
-    arm_radius: float = 0.06          # arm links are checked as spheres of this radius (m)
+    arm_clearance: float = 0.01       # extra distance (m) the arm links keep from a keep-out, on top of
+                                      # the links' own radii (kinematics.arm_spheres); 0 = may touch
     floor_z: float | None = None      # floor height in the base frame; None = no floor check
     flange_min_z: float | None = None # lowest flange height — only for a cell whose pendant installation
                                       # has a floor plane (it limits the FLANGE); None = no check (cart_360)
@@ -215,19 +224,21 @@ class SafetyLimits:
                     f"{k.describe()} + {k.side_clearance * 1000:.0f} mm near {_fmt(hit)}; {advice}")
 
     def check_arm(self, q, tcp=None, what: str = "pose") -> None:
-        """Arm links (upper arm .. wrist 3, as spheres of arm_radius) clear of
-        every keep-out and of the floor, and the flange->TCP line clear of the
-        keep-outs' tool zone, for joint angles q. Nominal kinematics."""
+        """Arm links (upper arm .. wrist 3, as spheres with the links' real
+        radii + arm_clearance) clear of every keep-out and of the floor, and the
+        flange->TCP line clear of the keep-outs' tool zone, for joint angles q.
+        Nominal kinematics."""
         if not self.has_obstacles:
             return
-        r = self.arm_radius
-        zones = [(k, k.arm_zone(r)) for k in self.keepout]
-        for link, p in arm_spheres(q, r):
-            for k, zone in zones:
-                if zone.strictly_contains(p):
+        c = self.arm_clearance
+        how = (f"come closer than {c * 1000:.0f} mm to" if c > 0 else "touch")
+        for link, p, r in arm_spheres(q, c):
+            for k in self.keepout:
+                if k.box.distance(p) < r - 1e-9:
                     raise SafetyViolation(
-                        f"{what}: the {link} would come closer than {r * 1000:.0f} mm to the keep-out "
-                        f"{k.describe()} (link point {_fmt(p)}) — choose a pose or path that keeps the arm clear")
+                        f"{what}: the {link} would {how} the keep-out "
+                        f"{k.describe()} (link centre {_fmt(p)}, link radius {(r - c) * 1000:.0f} mm) — "
+                        f"choose a pose or path that keeps the arm clear")
             if self.floor_z is not None and p[2] - r < self.floor_z:
                 raise SafetyViolation(
                     f"{what}: the {link} would touch the floor (link point {_fmt(p)}, floor at z {self.floor_z:+.3f} m)")
@@ -252,7 +263,7 @@ class SafetyLimits:
                f"{self.joint_speed_max} rad/s, {self.joint_accel_max} rad/s^2   payload {self.payload_max_kg} kg"]
         for k in self.keepout:
             out.append(f"  keep-out     {k.describe()}: tool {k.side_clearance * 1000:.0f} mm from its sides "
-                       f"(top may be touched), arm links {self.arm_radius * 1000:.0f} mm from sides and top")
+                       f"(top may be touched), arm links {self.arm_clearance * 1000:.0f} mm beyond their own surface")
         if self.floor_z is not None:
             out.append(f"  floor        z {self.floor_z:+.3f} m" + (f"; flange not below z {self.flange_min_z:+.3f} m"
                                                                    if self.flange_min_z is not None else ""))
@@ -260,11 +271,11 @@ class SafetyLimits:
 
     def check_joint_path(self, q_start, q_target, tcp=None) -> None:
         """A joint move (moveJ) turns all joints evenly from q_start to
-        q_target: check the arm every <= 3 deg of the largest joint travel."""
+        q_target: check the arm every <= 1 deg of the largest joint travel."""
         if not self.has_obstacles:
             return
         q0, q1 = np.asarray(q_start, dtype=float), np.asarray(q_target, dtype=float)
-        n = int(min(max(math.ceil(float(np.max(np.abs(q1 - q0))) / math.radians(3.0)), 1), 240))
+        n = int(min(max(math.ceil(float(np.max(np.abs(q1 - q0))) / math.radians(1.0)), 1), 720))
         for i in range(1, n + 1):
             self.check_arm(q0 + (q1 - q0) * (i / n), tcp, what=f"joint move, {i / n:.0%} of the way")
 
@@ -412,7 +423,8 @@ def cart_profile(d: dict) -> SafetyLimits:
       workspace box  reach-sized, from floor + floor_clearance up to reach.z_max
       keep-out       the cart body (footprint, floor .. top) and every box in
                      "extras" (handle, mounting plate ...); the tool keeps
-                     side_clearance from their sides, arm links arm_radius
+                     side_clearance from their sides, arm links arm_clearance
+                     (beyond the links' own radii)
       floor          the TCP stays floor_clearance above it, arm links above it
                      (optional "flange_floor_clearance": a pendant floor plane the
                      flange must stay above — not used by cart_360)
@@ -439,7 +451,7 @@ def cart_profile(d: dict) -> SafetyLimits:
         require_tcp=True,
         validated=bool(d.get("validated", False)),
         keepout=tuple(keepout),
-        arm_radius=float(d.get("arm_radius", 0.06)),
+        arm_clearance=float(d.get("arm_clearance", 0.01)),
         floor_z=floor,
         # only if the cell declares a pendant floor plane ("flange_floor_clearance"): 10 mm
         # above it, so the software rejects before the controller's plane has to act.

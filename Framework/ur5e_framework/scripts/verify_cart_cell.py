@@ -44,7 +44,7 @@ Q_URSIM_START = [math.radians(v) for v in (-92, -99, -126, -46, 91, -2)]
 
 TEST_CELL = {"format": "ur5e-cell/1", "name": "test_cart", "validated": False,
              "cart": {"x": [-0.56, 0.20], "y": [-0.32, 0.32], "top_z": 0.0}, "floor_z": -0.85,
-             "side_clearance": 0.05, "arm_radius": 0.06, "floor_clearance": 0.05, "flange_floor_clearance": 0.20,
+             "side_clearance": 0.05, "arm_clearance": 0.02, "floor_clearance": 0.05, "flange_floor_clearance": 0.20,
              "reach": {"x": [-0.95, 0.95], "y": [-0.95, 0.95], "z_max": 1.0},
              "extras": [{"name": "handle", "x": [-0.45, 0.0], "y": [0.32, 0.38], "z": [-0.07, -0.04]}]}
 
@@ -199,9 +199,20 @@ def offline() -> None:
     msg = low(-0.75, None)
     check("no tool, flange 100 mm above the floor: rejected (test cart has a pendant floor plane at 200)", msg is not None and "flange" in msg)
 
+    # the lab cart (numbers of 2026-11-18), links at their real radii, no extra clearance:
+    # JReck's reference on the real arm (2026-11-19) — base 0 deg, shoulder -222 deg clears the cart's back edge
+    lab = cart_profile({"format": "ur5e-cell/1", "name": "lab_cart", "validated": False,
+                        "cart": {"x": [-0.566, 0.124], "y": [-0.345, 0.345], "top_z": -0.010}, "floor_z": -0.800,
+                        "side_clearance": 0.02, "arm_clearance": 0.0, "floor_clearance": 0.05,
+                        "reach": {"x": [-0.95, 0.95], "y": [-0.95, 0.95], "z_max": 1.0}})
+    dip = lambda deg: rejected(lambda: lab.check_arm([0.0, math.radians(deg), 0.0, -math.pi / 2, 0.0, 0.0], None, "test"))
+    check("lab cart: base 0, shoulder -222 deg (arm dipping over the back edge): allowed", dip(-222.0) is None)
+    msg = dip(-224.0)
+    check("lab cart: shoulder -224 deg: upper arm touches the back edge -> rejected", msg is not None and "upper arm" in msg)
+
     print("\n5. joint path (moveJ)")
     q_other = list(q_out)
-    q_other[0] += math.pi                   # same pose mirrored to the +Y side; the base turns through the front
+    q_other[0] -= math.pi                   # same pose mirrored to the +Y side; the base turns through the FRONT (-X)
     a, b = arm(q_out), arm(q_other)
     msg = rejected(lambda: P.check_joint_path(q_out, q_other))
     check("both ends allowed, but the swing passes the cart front: rejected on the way",
