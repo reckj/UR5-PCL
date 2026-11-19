@@ -3,7 +3,8 @@
 # into the student repo clone (https://github.com/reckj/UR5-PCL-EmbodiedInteraction).
 #
 # Dev repo (this folder) is the source of truth for CODE:
-#   src/ur5e/ (minus toolio/), the whitelisted scripts/ and examples/, scenes/,
+#   src/ur5e/ (minus toolio/), the whitelisted scripts/ (check_connection,
+#   robot_status, smoke_test_move, rtde_viewer) and examples/, scenes/,
 #   toolheads/, pyproject.toml, docker-compose.yml.
 # The student repo owns its own DOCS and glue (README.md, docs/, .gitignore,
 # LICENSE, launchers, students/, programs/.gitkeep, context/ + the AI pointer
@@ -52,6 +53,7 @@ rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" \
 # --- 2. scripts: whitelist (everything else in scripts/ is internal) ---------
 rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" \
   --include 'check_connection.py' \
+  --include 'robot_status.py' \
   --include 'smoke_test_move.py' \
   --include 'rtde_viewer.py' \
   --exclude '*' \
@@ -70,6 +72,9 @@ rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" \
 # --- 4. viewer scenes + toolhead presets (whole folders) ----------------------
 rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" "$SRC/scenes/"    "$DST/scenes/"
 rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" "$SRC/toolheads/" "$DST/toolheads/"
+# shared workspace files covering the whole cell (scripts/make_cell_workspace.py)
+[ ${#DRY[@]} -eq 0 ] && mkdir -p "$DST/workspaces"
+rsync -a --delete "${DRY[@]}" "${COMMON_EXCLUDES[@]}" "$SRC/workspaces/" "$DST/workspaces/"
 
 # --- 5. single files ----------------------------------------------------------
 rsync -a "${DRY[@]}" "$SRC/pyproject.toml"      "$DST/pyproject.toml"
